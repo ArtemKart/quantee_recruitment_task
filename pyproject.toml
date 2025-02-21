@@ -1,0 +1,26 @@
+[project]
+name = "UploadService"
+version = "0.0.0"
+readme="README.md"
+
+classifiers = [
+   "Natural Language :: English",
+   "Operating System :: OS Independent",
+   "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "fastapi[all]",
+    "pydantic",
+    "pydantic-settings",
+    "SQLAlchemy",
+    "aiofiles",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "flake8",
+    "black",
+    "pylama[radon,mypy,toml]",
+]
