@@ -6,7 +6,7 @@ class BaseApiException(Exception):
 
 
 class ServiceException(BaseApiException):
-    """Failures in the service layer"""
+    """General failures"""
 
     pass
 
@@ -19,5 +19,11 @@ class ValidationException(BaseApiException):
 
 class FileUploadException(BaseApiException):
     """File upload errors"""
+
+    pass
+
+
+class DatabaseException(BaseApiException):
+    """Database errors"""
 
     pass

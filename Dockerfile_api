@@ -22,4 +22,4 @@ RUN pip install --no-cache-dir ${PROJECT_DIR}/*.whl \
     && rm ${PROJECT_DIR}/*.whl
 COPY --from=builder ${PROJECT_DIR}/app/api/gunicorn_config.py ${PROJECT_DIR}/gunicorn_config.py
 
-CMD ["sh", "-c", "python -m gunicorn --timeout 600 -c ${PROJECT_DIR}/gunicorn_config.py app.api.main:app"]
+CMD ["sh", "-c", "python -m gunicorn --log-level INFO --timeout 600 -c ${PROJECT_DIR}/gunicorn_config.py app.api.main:app"]

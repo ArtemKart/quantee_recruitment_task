@@ -5,11 +5,15 @@ import httpx
 
 from app import ROOT_DIR
 
-url = "http://localhost:80/api/v1/upload"
-# url = "http://localhost:8000/upload"
+# url = "http://localhost:80/api/v1/upload"
+url = "http://localhost:8000/upload"
 filename = "UPLOAD_TEST.zip"
 filepath = ROOT_DIR / filename
-headers = {"filename": quote(filename)}
+headers = {
+    "filename": quote(filename),
+    "path_to_save": "videos/family",
+    "file_size": "10000",
+}
 start = time.time()
 
 

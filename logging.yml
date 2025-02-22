@@ -1,35 +1,17 @@
-
 version: 1
-disable_existing_loggers: False
 formatters:
-  default:
-    # "()": uvicorn.logging.DefaultFormatter
+  standard:
     format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-  access:
-    # "()": uvicorn.logging.AccessFormatter
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
 handlers:
-  default:
-    formatter: default
+  console:
     class: logging.StreamHandler
-    stream: ext://sys.stderr
-  access:
-    formatter: access
-    class: logging.StreamHandler
-    stream: ext://sys.stdout
+    level: DEBUG
+    formatter: standard
 loggers:
-  uvicorn.error:
-    level: INFO
-    handlers:
-      - default
-    propagate: no
-  uvicorn.access:
-    level: INFO
-    handlers:
-      - access
-    propagate: no
+  my_logger:
+    level: DEBUG
+    handlers: [console]
 root:
   level: DEBUG
-  handlers:
-    - default
-  propagate: no
+  handlers: [console]
