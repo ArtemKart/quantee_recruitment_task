@@ -9,18 +9,34 @@ x-database-common:
 
 
 services:
-  api:
-    volumes:
-      - storage:/app/uploads
-
-  database:
-    environment:
-      <<: *database-env
+  quantee-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_api
+    environment:
+        <<: *database-env
     volumes:
-      - database-volume:/var/lib/postgresql/data
+      - storage:/storage
+
+  nginx:
+    build:
+      context: nginx/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - quantee-api
+
+
+#  database:
+#    environment:
+#      <<: *database-env
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    volumes:
+#      - database-volume:/var/lib/postgresql/data
 
 volumes:
   storage:

@@ -1,8 +1,13 @@
+import os
+from typing import Final
+
+import gunicorn
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
 
+from app.api import get_api_prefix, get_api_version
 from app.api.routers.upload import upload_router
 from app.exceptions.exception_handler import create_exception_handler
 from app.exceptions.exceptions import (
@@ -11,7 +16,20 @@ from app.exceptions.exceptions import (
     ValidationException,
 )
 
-app = FastAPI()
+if os.getenv(key="USE_PROXY", default="").lower() == "true":
+    settings = dict(
+        title="quantee-api",
+        version=get_api_version(),
+        servers=[{"url": get_api_prefix()}],
+        root_path=get_api_prefix(),
+    )
+else:
+    settings = dict(
+        title="quantee-api",
+        version=get_api_version(),
+    )
+
+app: Final = FastAPI(**settings)
 
 request_origins = [
     "http://localhost",
@@ -49,4 +67,4 @@ app.add_exception_handler(
 )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_config="logging.yml")
