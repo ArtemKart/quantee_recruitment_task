@@ -1,4 +1,4 @@
-"""first revision
+"""add FileStorage
 
 Revision ID: 4fa875158b16
 Revises:
@@ -26,6 +26,7 @@ def upgrade() -> None:
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("size", sa.Integer(), nullable=False),
         sa.Column("path", sa.String(), nullable=False),
+        sa.Column("date", sa.DateTime(timezone=True), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###

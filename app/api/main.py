@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
 
 from app.api import get_api_prefix, get_api_version
-from app.api.routers.upload import upload_router
+from app.api.routers.main_router import main_router
 from app.exceptions.exception_handler import create_exception_handler
 from app.exceptions.exceptions import (
     DatabaseException,
@@ -47,7 +47,7 @@ app.add_middleware(
 )
 
 
-app.include_router(upload_router)
+app.include_router(main_router)
 
 app.add_exception_handler(
     exc_class_or_status_code=ServiceException,
@@ -80,4 +80,4 @@ app.add_exception_handler(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=9000)

@@ -8,6 +8,8 @@ services:
         STORAGE_DIR: ${STORAGE_ROOT_DIR}
     volumes:
       - storage:/storage
+    networks:
+      - app-network
 
   nginx:
     build:
@@ -18,9 +20,11 @@ services:
       - "80:80"
     depends_on:
       - quantee-api
+    networks:
+      - app-network
 
   database:
-    image: postgres:latest
+    image: postgres:alpine3.21
     env_file: ".env"
     networks:
       - app-network
