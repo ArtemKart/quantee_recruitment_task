@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
 
 from app.api import get_api_prefix, get_api_version
-from app.api.routers.upload import main_router
+from app.api.routers.main_router import main_router
 from app.exceptions.exception_handler import create_exception_handler
 from app.exceptions.exceptions import (
     DatabaseException,

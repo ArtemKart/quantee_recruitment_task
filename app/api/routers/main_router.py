@@ -7,14 +7,14 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from app.api.crud.upload import (
+from app.api.crud.main_router import (
     read_files_from_db,
     upload_file,
     validate_file,
     write_file_to_db,
 )
 from app.api.deps import database_session
-from app.api.payload.upload import (
+from app.api.payload.main_router import (
     FileInfoListResponse,
     FileInfoResponse,
     UploadResponse,
@@ -60,5 +60,7 @@ async def upload(
 async def files(
     _r: Request, session: AsyncSession = Depends(database_session)
 ) -> FileInfoListResponse:
-    files = await read_files_from_db(session=session)
-    return FileInfoListResponse(files_info=[FileInfoResponse(**data) for data in files])
+    files_data = await read_files_from_db(session=session)
+    return FileInfoListResponse(
+        files_info=[FileInfoResponse(**data) for data in files_data]
+    )
