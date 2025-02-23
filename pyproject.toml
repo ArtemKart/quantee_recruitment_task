@@ -1,3 +1,8 @@
+[build-system]
+requires = ["setuptools == 69.0.3"]
+build-backend = "setuptools.build_meta"
+
+
 [project]
 name = "UploadService"
 version = "0.0.0"
@@ -15,6 +20,10 @@ dependencies = [
     "pydantic-settings",
     "SQLAlchemy",
     "aiofiles",
+    "gunicorn",
+    "uvicorn-worker",
+    "alembic",
+    "asyncpg",
 ]
 
 [project.optional-dependencies]
@@ -23,4 +32,9 @@ dev = [
     "flake8",
     "black",
     "pylama[radon,mypy,toml]",
+
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["storage*", "tests*"]
