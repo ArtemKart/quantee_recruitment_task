@@ -6,7 +6,7 @@ import aiofiles
 import aiofiles.os
 import aiofiles.ospath
 from fastapi import Request
-from sqlalchemy import text
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import FileStorage
@@ -55,7 +55,9 @@ async def write_file_to_db(obj: FileStorage, session: AsyncSession) -> None:
 
 async def read_files_from_db(session: AsyncSession) -> list[dict[str, Any]] | None:
     try:
-        stmt = text("SELECT * FROM public.filestorage")
+        stmt = select(
+            FileStorage.name, FileStorage.size, FileStorage.path, FileStorage.date
+        )
         raw = await session.execute(stmt)
         return [dict(row) for row in raw.mappings()]
     except Exception as e_info:
