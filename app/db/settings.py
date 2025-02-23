@@ -1,3 +1,5 @@
+from typing import Final
+
 from pydantic_settings import BaseSettings
 
 
@@ -11,9 +13,14 @@ class DBSettings(BaseSettings):
     @property
     def connection_string(self) -> str:
         return (
-            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
-            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            f"{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
+            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/"
+            f"{self.POSTGRES_DB}"
         )
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
+
+
+db_settings: Final = DBSettings()

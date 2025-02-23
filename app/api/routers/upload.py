@@ -37,12 +37,12 @@ async def upload(
     try:
         await validate_file(file=file.absolute_path)
         await upload_file(r=request, file_path=file.absolute_path)
-
+        file.uploaded = True
         storage_obj = FileStorage(
             name=file.name, size=file.size, path=str(file.absolute_path)
         )
         await write_file_to_db(obj=storage_obj, session=session)
-        file.uploaded = True
+
         return UploadResponse(
             status_code=status.HTTP_200_OK,
             details=f"File {file.name} uploaded successfully",
