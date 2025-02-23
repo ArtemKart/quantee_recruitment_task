@@ -1,26 +1,59 @@
----
-x-database-common:
-  &database-env
-  POSTGRES_HOST: ${POSTGRES_HOST}
-  POSTGRES_USER: ${POSTGRES_USER}
-  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  POSTGRES_DB: ${POSTGRES_DB}
-  POSTGRES_PORT: ${POSTGRES_PORT}
-
-
 services:
-  api:
-    volumes:
-      - storage:/app/uploads
-
-  database:
-    environment:
-      <<: *database-env
+  quantee-api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_api
+    env_file: ".env"
+    environment:
+        STORAGE_DIR: ${STORAGE_ROOT_DIR}
     volumes:
-      - database-volume:/var/lib/postgresql/data
+      - storage:/storage
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: nginx/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - quantee-api
+    networks:
+      - app-network
+
+  database:
+    image: postgres:alpine3.21
+    env_file: ".env"
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile_migrations
+    env_file: ".env"
+    environment:
+      POSTGRES_HOST: database
+    networks:
+      - app-network
+    depends_on:
+      database:
+        condition: service_healthy
+    entrypoint: ["alembic", "upgrade", "head"]
 
 volumes:
+  postgres-db-volume:
   storage:
+
+networks:
+  app-network:
+    driver: bridge

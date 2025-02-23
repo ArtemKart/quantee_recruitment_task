@@ -9,6 +9,9 @@ class AllowedExtensions(StrEnum):
     SVG = auto()
     EXE = auto()
     ZIP = auto()
+    INI = auto()
+    YML = auto()
+    YAML = auto()
 
     def __str__(self) -> str:
         return f".{self.value}"
