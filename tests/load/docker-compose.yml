@@ -1,0 +1,12 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
+    name: quantee_recruitment_task_app-network
