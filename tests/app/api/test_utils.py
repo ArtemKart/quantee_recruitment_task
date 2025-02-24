@@ -20,7 +20,7 @@ async def test_file_from_request(mocker: MockerFixture, tmp_path: Path) -> None:
         "pathtosave": test_file_path,
     }
 
-    file = await File.from_request(mock_request)
+    file = File.from_request(mock_request)
 
     assert isinstance(file, File)
 

@@ -23,6 +23,7 @@ from app.db import FileStorage
 from app.exceptions.exceptions import ServiceException
 from app.validator.validator import Validator
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 main_router = APIRouter()
@@ -32,9 +33,9 @@ main_router = APIRouter()
 async def upload(
     request: Request, session: AsyncSession = Depends(database_session)
 ) -> Optional[UploadResponse]:
-    file = await File.from_request(r=request)
+    file = File.from_request(r=request)
     try:
-        await Validator().validate(file=file.absolute_path)
+        Validator().validate(file=file.absolute_path)
         await upload_file(r=request, file_path=file.absolute_path)
         file.uploaded = True
         storage_obj = FileStorage(

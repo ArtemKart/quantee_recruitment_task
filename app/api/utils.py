@@ -27,12 +27,12 @@ class File:
         self.uploaded = uploaded
 
     @classmethod
-    async def from_request(cls, r: Request) -> Self:
+    def from_request(cls, r: Request) -> Self:
         try:
             file_name = unquote(r.headers["filename"])
             file_size = int(r.headers["filesize"])
             rel_path = Path(r.headers["pathtosave"])
-            absolute_path = await get_storage_root_dir() / rel_path / file_name
+            absolute_path = get_storage_root_dir() / rel_path / file_name
 
             return cls(
                 name=file_name,

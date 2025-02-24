@@ -32,11 +32,14 @@ def upload_file(filename) -> None:
     }
     with open(filename, "rb") as f:
         response = requests.post(url, data=f, headers=headers)
-    print(f"Uploaded: {response.status_code}")
+    print(f"status_code: {response.status_code}")
 
 
 if __name__ == "__main__":
     time.sleep(uniform(1, 2))
     file = generate_file()
 
+    start = time.time()
     upload_file(file)
+    end = time.time()
+    print(f"Taken time to upload file: {end - start} seconds")

@@ -27,10 +27,10 @@ from app.validator.validator import Validator
 )
 async def test_validate_file_extension(file: str, exception_msg: str | None) -> None:
     if not exception_msg:
-        await Validator()._validate_file_extension(Path(file))
+        Validator()._validate_file_extension(Path(file))
     else:
         with pytest.raises(ValidationException) as e_info:
-            await Validator()._validate_file_extension(Path(file))
+            Validator()._validate_file_extension(Path(file))
         assert exception_msg == e_info.value.detail
 
 

@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 async def upload_file(r: Request, file_path: Path) -> None:
     try:
-        if not await aiofiles.ospath.exists(file_path.parent):
-            await aiofiles.os.makedirs(file_path.parent)
+        if not file_path.parent.exists():
+            file_path.parent.mkdir(parents=True)
             logger.info(
                 f"Directory: {file_path.parent} does not exist. "
                 f"Creating directory: {file_path.parent}"

@@ -39,7 +39,7 @@ http {
             }
 
             rewrite ^/api/v1(.*)$ $1 break;
-            proxy_pass http://quantee-api:${API_PORT};
+            proxy_pass http://quantee-api:5050;
         }
 
         add_header Access-Control-Allow-Origin "*";

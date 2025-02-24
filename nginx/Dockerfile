@@ -1,9 +1,9 @@
-FROM alpine:latest as base
+FROM alpine:latest AS base
 
 WORKDIR /workspace
 COPY . .
 RUN apk --no-cache add gettext
-RUN source .bash; envsubst '${API_PORT}' < nginx.conf-template > /etc/nginx.conf
+COPY nginx.conf-template /etc/nginx.conf
 RUN dos2unix /etc/nginx.conf
 
 FROM nginx:stable

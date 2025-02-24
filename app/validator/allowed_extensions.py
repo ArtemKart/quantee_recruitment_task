@@ -18,5 +18,5 @@ class AllowedExtensions(StrEnum):
         return f".{self.value}"
 
     @classmethod
-    async def to_list(cls) -> list[str]:
+    def to_list(cls) -> list[str]:
         return [str(extension) for extension in cls]

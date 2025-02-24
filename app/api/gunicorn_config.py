@@ -1,5 +1,3 @@
-import os
-
 from uvicorn_worker import UvicornWorker
 
 
@@ -7,7 +5,7 @@ class Worker(UvicornWorker):
     pass
 
 
-bind = "0.0.0.0:" + os.getenv("API_PORT", "5050")
+bind = "0.0.0.0:5050"
 worker_class = "app.api.gunicorn_config.Worker"
 timeout = 120
 accesslog = "-"
