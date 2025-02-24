@@ -10,7 +10,6 @@ from starlette import status
 from app.api.crud.main_router import (
     read_files_from_db,
     upload_file,
-    validate_file,
     write_file_to_db,
 )
 from app.api.deps import database_session
@@ -22,6 +21,7 @@ from app.api.payload.main_router import (
 from app.api.utils import File
 from app.db import FileStorage
 from app.exceptions.exceptions import ServiceException
+from app.validator.validator import Validator
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +33,8 @@ async def upload(
     request: Request, session: AsyncSession = Depends(database_session)
 ) -> Optional[UploadResponse]:
     file = await File.from_request(r=request)
-
     try:
-        await validate_file(file=file.absolute_path)
+        await Validator().validate(file=file.absolute_path)
         await upload_file(r=request, file_path=file.absolute_path)
         file.uploaded = True
         storage_obj = FileStorage(
@@ -51,8 +50,9 @@ async def upload(
     except Exception as e_info:
         if await aiofiles.ospath.exists(file.absolute_path) and file.uploaded:
             await aiofiles.os.remove(file.absolute_path)
+        logger.error(f"While handling request, an exception occurred: {str(e_info)}")
         raise ServiceException(
-            detail=f"While handling request, an exception occurred: {e_info}"
+            detail=f"While handling request, an exception occurred: {str(e_info)}"
         )
 
 

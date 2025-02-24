@@ -3,6 +3,7 @@ class BaseApiException(Exception):
 
     def __init__(self, detail: str):
         self.detail = detail
+        super().__init__(self.detail)
 
 
 class ServiceException(BaseApiException):
@@ -25,5 +26,11 @@ class FileUploadException(BaseApiException):
 
 class DatabaseException(BaseApiException):
     """Database errors"""
+
+    pass
+
+
+class RequestException(BaseApiException):
+    """Request errors"""
 
     pass

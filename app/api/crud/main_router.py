@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import aiofiles
 import aiofiles.os
@@ -11,13 +11,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import FileStorage
 from app.exceptions.exceptions import DatabaseException, FileUploadException
-from app.validator.validator import Validator
 
 logger = logging.getLogger(__name__)
-
-
-async def validate_file(file: Path) -> None:
-    await Validator().validate(file)
 
 
 async def upload_file(r: Request, file_path: Path) -> None:
@@ -53,17 +48,20 @@ async def write_file_to_db(obj: FileStorage, session: AsyncSession) -> None:
         )
 
 
-async def read_files_from_db(session: AsyncSession) -> list[dict[str, Any]] | None:
+async def read_files_from_db(session: AsyncSession) -> list[Optional[dict[str, Any]]]:
     try:
         stmt = select(
             FileStorage.name, FileStorage.size, FileStorage.path, FileStorage.date
         )
         raw = await session.execute(stmt)
+        if not raw:
+            return []
         return [dict(row) for row in raw.mappings()]
+
     except Exception as e_info:
         logger.error(
-            f"An exception occurred while " f"fetching data from database: {e_info}"
+            f"An exception occurred while fetching data from database: {e_info}"
         )
         raise DatabaseException(
-            f"An exception occurred while " f"fetching data from database: {e_info}"
+            f"An exception occurred while fetching data from database: {e_info}"
         )

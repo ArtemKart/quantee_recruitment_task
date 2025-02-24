@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile_api
     env_file: ".env"
     environment:
-        STORAGE_DIR: ${STORAGE_ROOT_DIR}
+      POSTGRES_HOST: database
     volumes:
-      - storage:/storage
+      - storage:${STORAGE_ROOT_DIR}
     networks:
       - app-network
 

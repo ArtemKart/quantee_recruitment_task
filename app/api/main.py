@@ -12,6 +12,7 @@ from app.exceptions.exception_handler import create_exception_handler
 from app.exceptions.exceptions import (
     DatabaseException,
     FileUploadException,
+    RequestException,
     ServiceException,
     ValidationException,
 )
@@ -73,6 +74,13 @@ app.add_exception_handler(
     handler=create_exception_handler(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="Exception occurred during interaction with database",
+    ),
+)
+app.add_exception_handler(
+    exc_class_or_status_code=RequestException,
+    handler=create_exception_handler(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Exception occurred while handling the request",
     ),
 )
 

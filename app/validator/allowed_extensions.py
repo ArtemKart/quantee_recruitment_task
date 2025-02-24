@@ -12,6 +12,7 @@ class AllowedExtensions(StrEnum):
     INI = auto()
     YML = auto()
     YAML = auto()
+    TXT = auto()
 
     def __str__(self) -> str:
         return f".{self.value}"
